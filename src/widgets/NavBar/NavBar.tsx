@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
+import { Search, User } from "lucide-react";
 import { useAuth } from "@/features/auth/useAuth";
 import { usePathname } from "next/navigation";
+import { Button } from "@/shared/ui/button/Button";
 import { cn } from "@/shared/lib/utils";
 
 /**
@@ -32,9 +33,21 @@ export function NavBar() {
       <div className="flex items-center gap-5">
         {isAuthed ? (
           <>
-            <Link href="/dashboard" className={linkClass("/dashboard")}>
-              Dashboard
+            <Link href="/main" className={linkClass("/main")}>
+              Main
             </Link>
+
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" iconPosition="only">
+                <Search size={20} color="#555D6D" />
+              </Button>
+              <Button variant="ghost" iconPosition="only">
+                <User size={20} color="#555D6D" />
+              </Button>
+              <Button variant="main" size="sm">
+                상품등록
+              </Button>
+            </div>
             <button
               onClick={logout}
               className="text-sm font-medium text-gray-700 transition-colors hover:text-sogang-700 dark:text-gray-300">

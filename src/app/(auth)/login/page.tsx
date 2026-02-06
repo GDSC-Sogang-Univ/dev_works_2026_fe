@@ -61,7 +61,7 @@ export default function LoginPage() {
       // TODO 4: 로그인 성공 처리
       //   - result.success === true && "accessToken" in result 이면
       //     1) authLogin(result.accessToken)  → 토큰 저장
-      //     2) router.push("/dashboard")      → 대시보드로 이동
+      //     2) router.push("/main")          → 메인으로 이동
       // ───────────────────────────────────────────────
     } catch {
       setError("네트워크 오류가 발생했습니다. 다시 시도해주세요.");

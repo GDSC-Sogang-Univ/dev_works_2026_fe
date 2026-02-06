@@ -1,6 +1,11 @@
-import { Button } from "@/shared/ui/button/Button";
+"use client";
+
+import Link from "next/link";
+import { useAuth } from "@/features/auth/useAuth";
 
 export default function Home() {
+  const { isAuthed } = useAuth();
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-00 dark:bg-gray-1000">
       {/* 랜딩 페이지 히어로 섹션 */}
@@ -23,14 +28,28 @@ export default function Home() {
             믿을 수 있는 거래, 합리적인 가격으로 만나보세요.
           </p>
 
-          {/* CTA 버튼 */}
+          {/* CTA 버튼 — 로그인 상태에 따라 분기 */}
           <div className="flex gap-4 justify-center mt-8">
-            <Button variant="main" size="xl">
-              시작하기
-            </Button>
-            <Button variant="outline" size="xl">
-              둘러보기
-            </Button>
+            {isAuthed ? (
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center justify-center rounded-md bg-sogang-700 px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-sogang-800">
+                대시보드로 이동
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center justify-center rounded-md bg-sogang-700 px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-sogang-800">
+                  시작하기
+                </Link>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-lg font-semibold text-gray-900 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-transparent dark:text-white dark:hover:bg-gray-800">
+                  회원가입
+                </Link>
+              </>
+            )}
           </div>
         </div>
 

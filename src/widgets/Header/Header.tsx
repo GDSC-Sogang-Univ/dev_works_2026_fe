@@ -18,14 +18,14 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
       <span className="text-[24px] font-black text-sogang-700">서강마켓</span>
       <div className="flex gap-3 items-center">
         {/* 검색 아이콘 */}
-        <button className="p-2">
+        <Button variant={"ghost"} iconPosition={"only"}>
           <Search size={24} color="#555D6D" />
-        </button>
+        </Button>
 
         {/* 프로필 아이콘 */}
-        <button className="p-2">
+        <Button variant={"ghost"} iconPosition={"only"}>
           <User size={24} color="#555D6D" />
-        </button>
+        </Button>
 
         {/* 상품 등록 버튼 */}
         <Button variant="main" size="sm">

@@ -10,16 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        main: "bg-sogang-700 text-white hover:bg-sogang-800 disabled:bg-gray-200 disabled:text-gray-600 dark:bg-sogang-700 dark:hover:bg-sogang-800 dark:disabled:bg-gray-700 dark:disabled:text-gray-500",
+        main: "!bg-sogang-700 text-white hover:!bg-sogang-800 disabled:!bg-gray-200 disabled:text-gray-600 dark:!bg-sogang-700 dark:hover:!bg-sogang-800 dark:disabled:!bg-gray-700 dark:disabled:text-gray-500",
         destructive:
-          "bg-sogang-900 text-white hover:bg-sogang-800 dark:bg-sogang-900 dark:hover:bg-sogang-800",
+          "!bg-sogang-900 text-white hover:!bg-sogang-800 dark:!bg-sogang-900 dark:hover:!bg-sogang-800",
         outline:
-          "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-transparent dark:border-gray-600 dark:hover:bg-gray-800 dark:data-[state=selected]:border-gray-500",
+          "border border-gray-300 !bg-white text-gray-900 hover:!bg-gray-100 dark:text-white dark:!bg-transparent dark:border-gray-600 dark:hover:!bg-gray-800 dark:data-[state=selected]:border-gray-500",
         secondary:
-          "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:data-[state=selected]:bg-gray-700 dark:data-[state=selected]:text-white",
-        dark: "bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-800 dark:hover:bg-gray-700 dark:disabled:bg-gray-700 dark:disabled:text-gray-500 dark:data-[state=selected]:bg-gray-700 dark:data-[state=selected]:text-white dark:data-[state=selected]:font-semibold dark:data-[state=selected]:border dark:data-[state=selected]:border-gray-600",
-        ghost: "bg-transparent hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
-        link: "bg-transparent underline-offset-4 hover:underline !p-0 !h-fit dark:text-gray-400 dark:hover:text-white dark:underline dark:disabled:underline-none dark:disabled:text-gray-600",
+          "!bg-gray-100 text-gray-900 hover:!bg-gray-200 dark:!bg-gray-800 dark:text-white dark:hover:!bg-gray-700 dark:data-[state=selected]:!bg-gray-700 dark:data-[state=selected]:text-white",
+        dark: "!bg-gray-900 text-white hover:!bg-gray-800 dark:!bg-gray-800 dark:hover:!bg-gray-700 dark:disabled:!bg-gray-700 dark:disabled:text-gray-500 dark:data-[state=selected]:!bg-gray-700 dark:data-[state=selected]:text-white dark:data-[state=selected]:font-semibold dark:data-[state=selected]:border dark:data-[state=selected]:border-gray-600",
+        ghost: "!bg-transparent hover:!bg-gray-100 dark:text-gray-300 dark:hover:!bg-gray-800",
+        link: "!bg-transparent underline-offset-4 hover:underline !p-0 !h-fit dark:text-gray-400 dark:hover:text-white dark:underline dark:disabled:underline-none dark:disabled:text-gray-600",
       },
       size: {
         "default": "h-10 text-base rounded-[6px]",

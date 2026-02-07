@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(error("MISSING_FIELDS"), { status: 400 });
     }
 
-    // 가입된 유저에게만 코드 발송(정책에 따라 변경 가능)
+    // 존재하는 유저라면 코드 발송 가능
+    // (이메일 인증 여부와 관계없이 발송)
     if (!findUser(email)) {
       return NextResponse.json(error("USER_NOT_FOUND"), { status: 404 });
     }

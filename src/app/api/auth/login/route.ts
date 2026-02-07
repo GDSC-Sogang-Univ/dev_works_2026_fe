@@ -25,11 +25,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(error("INVALID_CREDENTIALS"), { status: 401 });
     }
 
-    // 3. (선택) 이메일 인증 여부 확인
-    // 이메일 인증을 필수로 하고 싶다면 아래 주석 해제
-    // if (!user.isEmailVerified) {
-    //   return NextResponse.json(error("EMAIL_NOT_VERIFIED"), { status: 403 });
-    // }
+    // 3. (필수) 이메일 인증 여부 확인
+    // 이메일 인증이 완료되지 않은 계정은 로그인 불가
+    if (!user.isEmailVerified) {
+      return NextResponse.json(error("EMAIL_NOT_VERIFIED"), { status: 403 });
+    }
 
     // 4. Mock 토큰 발급
     const accessToken = `mock-token-${user.email}-${Date.now()}`;

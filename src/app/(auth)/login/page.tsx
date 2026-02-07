@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { TextField } from "@/shared/ui/text-field/TextField";
 import { AuthButton } from "@/shared/ui/auth-button/AuthButton";
 import { Alert } from "@/shared/ui/alert/Alert";
@@ -12,57 +15,68 @@ import { useAuth } from "@/features/auth/useAuth";
 /**
  * 로그인 페이지
  * ─────────────
- * 기본 폼 UI가 갖춰져 있습니다.
- * 아래 TODO 들을 완성해 주세요!
+ * 이메일과 비밀번호로 로그인합니다.
+ * 이메일 인증이 필수입니다.
  */
 export default function LoginPage() {
   const router = useRouter();
   const { login: authLogin } = useAuth();
 
-  // ── 폼 상태 ────────────────────────────────────────
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   // ── UI 상태 ────────────────────────────────────────
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const loginSchema = z.object({
+    email: z.string().min(1, "이메일을 입력해주세요.").email("올바른 이메일 형식이 아닙니다."),
+    password: z
+      .string()
+      .min(1, "비밀번호를 입력해주세요.")
+      .min(8, "비밀번호는 8자 이상이어야 합니다."),
+  });
 
-  // ── 폼 제출 핸들러 ────────────────────────────────
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  type LoginFormValues = z.infer<typeof loginSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onSubmit",
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
     setError(null);
 
-    // ─────────────────────────────────────────────────
-    // TODO 1: 이메일·비밀번호 validation
-    //   - 이메일이 비어있으면 "이메일을 입력해주세요."
-    //   - 이메일 형식이 올바르지 않으면 "올바른 이메일 형식이 아닙니다."
-    //   - 비밀번호가 비어있으면 "비밀번호를 입력해주세요."
-    //   - 비밀번호 8자 미만이면 "비밀번호는 8자 이상이어야 합니다."
-    // ─────────────────────────────────────────────────
-
-    // ─────────────────────────────────────────────────
-    // TODO 2: 로딩 상태 처리
-    //   - API 호출 전 setLoading(true)
-    //   - API 호출 후 (성공/실패 모두) setLoading(false)
-    // ─────────────────────────────────────────────────
-
     try {
-      const result = await loginApi(email, password);
+      const result = await loginApi(data.email, data.password);
 
-      // ───────────────────────────────────────────────
-      // TODO 3: 에러 응답 처리
-      //   - result.success === false 이면 에러코드에 따라
-      //     사용자 친화적 메시지를 setError로 보여주세요.
-      //   예) "INVALID_CREDENTIALS" → "이메일 또는 비밀번호가 올바르지 않습니다."
-      //       "EMAIL_NOT_VERIFIED"  → "이메일 인증을 완료해주세요."
-      // ───────────────────────────────────────────────
+      if (!result.success) {
+        if (result.errorCode === "EMAIL_NOT_VERIFIED") {
+          router.push(`/signup?step=verify&email=${encodeURIComponent(data.email)}`);
+          return;
+        }
 
-      // ───────────────────────────────────────────────
-      // TODO 4: 로그인 성공 처리
-      //   - result.success === true && "accessToken" in result 이면
-      //     1) authLogin(result.accessToken)  → 토큰 저장
-      //     2) router.push("/main")          → 메인으로 이동
-      // ───────────────────────────────────────────────
+        // 3. 에러 응답 처리
+        const errorMessages: Record<string, string> = {
+          INVALID_CREDENTIALS: "이메일 또는 비밀번호가 올바르지 않습니다.",
+          MISSING_FIELDS: "모든 항목을 입력해주세요.",
+          UNKNOWN_ERROR: "로그인 중 오류가 발생했습니다.",
+        };
+
+        const message =
+          errorMessages[result.errorCode] || result.message || "알 수 없는 오류가 발생했습니다.";
+        setError(message);
+        return;
+      }
+
+      // 4. 로그인 성공 처리
+      if ("accessToken" in result) {
+        authLogin(result.accessToken);
+        router.push("/main");
+      }
     } catch {
       setError("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
     }
@@ -83,24 +97,24 @@ export default function LoginPage() {
         <Alert message={error} variant="error" />
 
         {/* 폼 */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <TextField
             label="이메일"
             type="email"
             placeholder="you@sogang.ac.kr"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email?.message}
+            {...register("email")}
           />
 
           <TextField
             label="비밀번호"
             type="password"
             placeholder="8자 이상 입력"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password?.message}
+            {...register("password")}
           />
 
-          <AuthButton type="submit" loading={loading}>
+          <AuthButton type="submit" loading={isSubmitting}>
             로그인
           </AuthButton>
         </form>
